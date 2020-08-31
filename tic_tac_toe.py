@@ -67,7 +67,6 @@ def draw_x(point, size=10):
 
 def player_turn(board, grid, player_symbol):
     point = rs.GetPoint("{} turn".format(player_symbol))
-    if not point: return False
     for i, j in get_possible_moves(board):
         if rs.PointInPlanarClosedCurve(point, grid[i][j]) == 1:
             point = rs.CurveAreaCentroid(grid[i][j])[0]
@@ -82,7 +81,7 @@ def player_turn(board, grid, player_symbol):
 
 
 def ai_turn(board, grid, ai_symbol, player_symbol):
-    row, column = best_move(board, ai_symbol, player_symbol)
+    row, column = ai_brain(board, ai_symbol, player_symbol)
     board[row][column] = ai_symbol
     point = rs.CurveAreaCentroid(grid[row][column])[0]
     if ai_symbol == 'X':
@@ -90,17 +89,18 @@ def ai_turn(board, grid, ai_symbol, player_symbol):
     else:
         draw_o(point)
 
-def best_move(board, ai_symbol, player_symbol):
-    best_move = random.choice(get_possible_moves(board))
+def ai_brain(board, ai_symbol, player_symbol):
     for i, j in get_possible_moves(board):
         board_copy = [row[:] for row in board]
         board_copy[i][j] = ai_symbol
         if check_winner(board_copy) == "{} wins!".format(ai_symbol):
-            best_move = (i, j)
+            return (i, j)
+    for i, j in get_possible_moves(board):
+        board_copy = [row[:] for row in board]
         board_copy[i][j] = player_symbol
         if check_winner(board_copy) == "{} wins!".format(player_symbol):
-            best_move = (i, j)
-    return best_move
+            return (i, j)
+    return random.choice(get_possible_moves(board))
 
 def tic_tac_toe():
     board = [['', '', ''], ['', '', ''], ['', '', '']]
