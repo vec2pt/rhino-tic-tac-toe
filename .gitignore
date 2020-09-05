@@ -1,8 +1,23 @@
 
-# Created by https://www.gitignore.io/api/osx
-# Edit at https://www.gitignore.io/?templates=osx
+# Created by https://www.toptal.com/developers/gitignore/api/macos,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=macos,git
 
-### OSX ###
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
+
+### macOS ###
 # General
 .DS_Store
 .AppleDouble
@@ -30,4 +45,4 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# End of https://www.gitignore.io/api/osx
+# End of https://www.toptal.com/developers/gitignore/api/macos,git
