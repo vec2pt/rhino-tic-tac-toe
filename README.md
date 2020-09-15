@@ -1,8 +1,8 @@
 # rhino-tic-tac-toe
 
-![rhino-tic-tac-toe.gif](rhino-tic-tac-toe.gif)
-
 Tic-Tac-Toe game for Rhinoceros
+
+![rhino-tic-tac-toe.gif](rhino-tic-tac-toe.gif)
 
 ## Installation
 
