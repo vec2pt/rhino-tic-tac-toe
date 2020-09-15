@@ -6,7 +6,7 @@ Tic-Tac-Toe game for Rhinoceros
 
 ## Installation
 
-1. Drop script files to the directory:
+1. Drop script file to the directory:
 ```
 /Users/HOME/Library/Application Support/McNeel/Rhinoceros/6.0/Scripts
 ```
