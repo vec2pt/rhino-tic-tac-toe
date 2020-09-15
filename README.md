@@ -1,6 +1,6 @@
 # rhino-tic-tac-toe
 
-Tic-Tac-Toe game for Rhinoceros
+Tic-Tac-Toe game for Rhino 3D.
 
 ![rhino-tic-tac-toe.gif](rhino-tic-tac-toe.gif)
 
