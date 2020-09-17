@@ -20,10 +20,10 @@ Tic-Tac-Toe game for [Rhino 3D](https://www.rhino3d.com).
     ```
 
 2. Run script via command:
-```
-! _-RunPythonScript ScriptName
+    ```
+    ! _-RunPythonScript ScriptName
 
-```
+    ```
 
 ## License
 
