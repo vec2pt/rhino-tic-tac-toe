@@ -6,10 +6,18 @@ Tic-Tac-Toe game for Rhino 3D.
 
 ## Installation
 
-1. Drop script file to the directory:
-```
-/Users/HOME/Library/Application Support/McNeel/Rhinoceros/6.0/Scripts
-```
+
+1. Drop script files to the directory:
+
+    for macOS:
+    ```
+    /Users/HOME/Library/Application Support/McNeel/Rhinoceros/6.0/Scripts
+    ```
+    for Windows:
+
+    ```
+    C:\Users\UserName\AppData\Roaming\McNeel\Rhinoceros\6.0\scripts
+    ```
 
 2. Run script via command:
 ```
