@@ -58,8 +58,8 @@ def draw_x(point, size=10):
     y = point[1] - (size*.75)/2
     r = rs.AddRectangle((x, y, 0), size*.05, size*.75)
     rectangles = [
-    rs.RotateObject(r, point, 45, copy=True),
-    rs.RotateObject(r, point, -45, copy=True)]
+        rs.RotateObject(r, point, 45, copy=True),
+        rs.RotateObject(r, point, -45, copy=True)]
     rs.DeleteObject(r)
     rs.CurveBooleanUnion(rectangles)
     rs.DeleteObjects(rectangles)
