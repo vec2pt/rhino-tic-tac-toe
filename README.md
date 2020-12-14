@@ -31,4 +31,4 @@ Distributed under the MIT License.
 
 ## Contact
 
-Project Link: [https://github.com/M-VVV/rhino-tic-tac-toe](https://github.com/M-VVV/rhino-tic-tac-toe)
+Project Link: [https://github.com/vlmarch/rhino-tic-tac-toe](https://github.com/vlmarch/rhino-tic-tac-toe)
