@@ -1,6 +1,7 @@
 # https://geekflare.com/tic-tac-toe-python-code/
 # https://habr.com/ru/post/329058/
 # https://medium.com/analytics-vidhya/i-programmed-a-tic-tac-toe-game-with-minimax-algorithm-but-how-does-it-work-8c689842c9ee
+# http://theoryofprogramming.com/2017/12/12/minimax-algorithm/
 
 
 def display_board(board):
