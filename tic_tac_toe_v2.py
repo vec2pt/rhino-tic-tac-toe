@@ -6,10 +6,19 @@
 
 import rhinoscriptsyntax as rs
 import random
+import copy
 
 CELL_SIZE = 10
 PLAYER_O = 'O'
 PLAYER_X = 'X'
+
+# ???
+# class Cell:
+#     def __init__(self, i, row, column, v):
+#         self.i = i
+#         self.row = row
+#         self.column = column
+#         self.v = ''
 
 
 class TicTacToe:
@@ -30,17 +39,21 @@ class TicTacToe:
     def check_winner(self):
         for row in self.board:
             if row[0] == row[1] == row[2] != '':
-                return "{} wins!".format(row[0])
+                return True
         for i in range(3):
             column = [row[i] for row in self.board]
             if column[0] == column[1] == column[2] != '':
-                return "{} wins!".format(column[0])
+                return True
         if self.board[0][0] == self.board[1][1] == self.board[2][2] != '':
-            return "{} wins!".format(self.board[0][0])
+            return True
         if self.board[0][2] == self.board[1][1] == self.board[2][0] != '':
-            return "{} wins!".format(self.board[0][2])
+            return True
+        return False
+
+    def check_tie(self):
         if all(self.board[0]) and all(self.board[1]) and all(self.board[2]):
-            return "Tie!"
+            return True
+        return False
 
     def make_turn(self):
         self.get_possible_moves()
@@ -114,17 +127,25 @@ class TicTacToe:
 
 
     def ai_turn(self):
+        self.temp_board = copy.deepcopy(self.board)
         for i, j in self.possible_moves:
-            self.minimax(i, j, 2)
+            self.minimax(i, j, self.temp_board)
         i, j = random.choice(self.possible_moves)
         return (i, j)
 
-    def minimax(self, i, j, depth): #def minimax(self, i, j, depth, maximizingPlayer):
-        if depth == 0:
-            return 0
-        if self.whose_turn == self.ai_symbol:
+    def minimax(self, i, j, temp_board): #def minimax(self, i, j, depth, maximizingPlayer):
+        if self.check_winner():
             pass
-        pass
+        if self.check_tie():
+            return 5
+        if self.whose_turn == self.ai_symbol:
+            if self.check_winner():
+                return 10
+            # minimax()
+        else:
+            if self.check_winner():
+                return -10
+            # minimax()
 
     def start(self):
         self.create_board()
@@ -135,9 +156,14 @@ class TicTacToe:
 
         while True:
             self.make_turn()
-            mes = self.check_winner()
-            if mes:
-                print(mes)
+            if self.check_winner():
+                if self.whose_turn == PLAYER_O:
+                   print("{} wins!".format(PLAYER_X))
+                else:
+                    print("{} wins!".format(PLAYER_O))
+                return
+            if self.check_tie():
+                print("Tie!")
                 return
 
 
