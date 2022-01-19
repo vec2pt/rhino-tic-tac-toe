@@ -18,7 +18,7 @@ class TicTacToe:
         self.board = [['', '', ''], ['', '', ''], ['', '', '']]
         self.player_symbol = PLAYER_O
         self.ai_symbol = PLAYER_X
-        self.turn = PLAYER_O
+        self.whose_turn = PLAYER_O
 
     def get_possible_moves(self):
         self.possible_moves = []
@@ -42,15 +42,21 @@ class TicTacToe:
         if all(self.board[0]) and all(self.board[1]) and all(self.board[2]):
             return "Tie!"
 
-    def make_turm(self, i, j):
+    def make_turn(self):
+        self.get_possible_moves()
+        if self.whose_turn == self.player_symbol: i, j = self.player_turn()
+        else: i, j = self.ai_turn()
         line = rs.AddLine(self.grid[i][j][0], self.grid[i][j][1])
         point = rs.CurveMidPoint(line)
         rs.DeleteObject(line)
-        self.board[i][j] = self.turn
-        self.draw_x(point) if self.turn == PLAYER_X else self.draw_o(point)
-        self.turn = PLAYER_X if self.turn == PLAYER_O else PLAYER_O
+        self.board[i][j] = self.whose_turn
+        self.draw_x(point) if self.whose_turn == PLAYER_X else self.draw_o(point)
+        self.whose_turn = PLAYER_X if self.whose_turn == PLAYER_O else PLAYER_O
 
     def create_board(self, size=CELL_SIZE):
+        board_location_point = rs.GetPoint("Set board starter point")
+        if board_location_point:
+            self.board_location_point = board_location_point
         point = self.board_location_point
         self.grid = []
         for i in range(3):
@@ -102,39 +108,33 @@ class TicTacToe:
     def player_turn(self):
         while True:
             point = rs.GetPoint("{} turn".format(self.player_symbol))
-            self.get_possible_moves()
             for i, j in self.possible_moves:
                 if self.test_point(point, self.grid[i][j]):
-                    self.make_turm(i, j)
-                    return
+                    return (i, j)
 
 
     def ai_turn(self):
-        self.get_possible_moves()
-        ##
+        for i, j in self.possible_moves:
+            self.minimax(i, j, 2)
         i, j = random.choice(self.possible_moves)
-        self.make_turm(i, j)
+        return (i, j)
 
+    def minimax(self, i, j, depth): #def minimax(self, i, j, depth, maximizingPlayer):
+        if depth == 0:
+            return 0
+        if self.whose_turn == self.ai_symbol:
+            pass
+        pass
 
     def start(self):
-        board_location_point = rs.GetPoint("Set board starter point")
-        if board_location_point:
-            self.board_location_point = board_location_point
-
-        self.get_player_symbol()
         self.create_board()
+        self.get_player_symbol()
 
         if random.randint(0, 1):
-            self.turn = self.ai_symbol
-            self.ai_turn()
+            self.whose_turn = self.ai_symbol
 
         while True:
-            self.player_turn()
-            mes = self.check_winner()
-            if mes:
-                print(mes)
-                return
-            self.ai_turn()
+            self.make_turn()
             mes = self.check_winner()
             if mes:
                 print(mes)
