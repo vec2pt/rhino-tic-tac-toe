@@ -6,11 +6,7 @@ Tic-Tac-Toe game for [Rhino 3D](https://www.rhino3d.com).
 
 ## Installation
 
-Run script via command:
-    ```
-    ! _-RunPythonScript "the/path/to/the/tic-tac-toe.py"
-
-    ```
+Run script via command:` ! _-RunPythonScript "the/path/to/the/tic-tac-toe.py"`
 
 ## License
 
