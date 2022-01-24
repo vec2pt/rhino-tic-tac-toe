@@ -1,4 +1,4 @@
-# Tic Tac Toe for Rhino v2
+# CLI Tic Tac Toe with the Minimax Algorithm
 # 20220123
 # Vladyslav M
 # https://github.com/vlmarch
@@ -17,8 +17,11 @@ def print_board(board):
 def enter_move(board, whose_turn, player):
     if whose_turn == player:
         print("Player move:")
-        i = int(input("Please enter row index:"))
-        j = int(input("Please enter column index:"))
+        while True:
+            i = int(input("\tPlease enter row index:"))
+            j = int(input("\tPlease enter column index:"))
+            if (i, j) in get_possible_moves(board):
+                break
     else:
         print("Computer move:")
         i, j = ai_turn(board, whose_turn)
@@ -83,7 +86,7 @@ def minimax(board, player, depth=0, maximizing=False):
     return best_score
 
 
-def game():
+def tic_tac_toe():
     board = [['-', '-', '-'],
              ['-', '-', '-'],
              ['-', '-', '-']]
@@ -97,6 +100,7 @@ def game():
     else:
         whose_turn = ai_player
 
+    print()
     print_board(board)
     while True:
         enter_move(board, whose_turn, player)
@@ -108,4 +112,5 @@ def game():
             return
         whose_turn = next_player(whose_turn)
 
-game()
+if __name__ == "__main__":
+    tic_tac_toe()

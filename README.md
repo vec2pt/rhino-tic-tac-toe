@@ -6,22 +6,9 @@ Tic-Tac-Toe game for [Rhino 3D](https://www.rhino3d.com).
 
 ## Installation
 
-
-1. Drop script files to the directory:
-
-    for macOS:
+Run script via command:
     ```
-    /Users/HOME/Library/Application Support/McNeel/Rhinoceros/6.0/Scripts
-    ```
-    for Windows:
-
-    ```
-    C:\Users\UserName\AppData\Roaming\McNeel\Rhinoceros\6.0\scripts
-    ```
-
-2. Run script via command:
-    ```
-    ! _-RunPythonScript ScriptName
+    ! _-RunPythonScript "the/path/to/the/tic-tac-toe.py"
 
     ```
 
