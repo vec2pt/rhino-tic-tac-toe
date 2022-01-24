@@ -5,27 +5,30 @@
 
 
 # import rhinoscriptsyntax as rs
-import random
-import copy
 
 CELL_SIZE = 10
 PLAYER_O = 'O'
 PLAYER_X = 'X'
-MODE = False # True - for Rhino mode; False - for cmd mode;
+RHINO_MODE = False # True - for Rhino mode; False - for cmd mode;
 
-def display_board(board):
+MINIMAX_DEPTH = 1
+
+if RHINO_MODE: import rhinoscriptsyntax as rs
+
+
+def print_board(board):
     for i in board:
         print('|'.join(i))
     print('')
 
 def enter_move(board, whose_turn, player):
     if whose_turn == player:
-        i = input()
-        j = input()
-        board[i][j] = player
+        i = int(input("Please enter row index:"))
+        j = int(input("Please enter column index:"))
     else:
-        print(ai_turn(board, whose_turn))
-
+        i, j = ai_turn(board, whose_turn)
+    board[i][j] = whose_turn
+    print_board(board)
 
 def get_possible_moves(board):
     possible_moves = []
@@ -53,73 +56,49 @@ def is_tie(board):
 def next_player(previous_player):
     return PLAYER_O if previous_player == PLAYER_X else PLAYER_X
 
-
-def draw_move(board):
-    pass
-    # The function draws the computer's move and updates the board.
-
 def ai_turn(board, ai_player):
-    # temp_board = copy.deepcopy(board)
-    return minimax(board, ai_player)
-
-def minimax(board, ai_player, maximizing=True, level=0):
-    best_score = float('-inf')
+    best_score = -1000
+    best_move = None
     for i, j in get_possible_moves(board):
-        temp_board = copy.deepcopy(board)
-        temp_board[i][j] = ai_player
-        # display_board(temp_board)
-        if is_victory(temp_board):
-            if maximizing:
-                store = 1 - level
-            else:
-                store = -1 - level
-        elif is_tie(temp_board):
-            store = 0
-        else:
-            if maximizing:
-                store = min(minimax(temp_board, next_player(ai_player), not(maximizing), level=level+1))
-            else:
-                store = max(minimax(temp_board, next_player(ai_player), not(maximizing), level=level+1))
-        if store > best_score:
+        board[i][j] = ai_player
+        score = minimax(board, ai_player)
+        board[i][j] = '-'
+        if score > best_score:
+            best_score = score
             best_move = (i, j)
     return best_move
 
-# def ai_turn(board, ai_player):
-#     best_score = float('-inf')
-#     for i, j in get_possible_moves(board):
-#         temp_board = copy.deepcopy(board)
-#         temp_board[i][j] = ai_player
-#         score = minimax(temp_board, ai_player)
-#         if score > best_score:
-#             best_score = score
-#             best_move = (i, j)
-#     return best_move
+def minimax(board, player, depth=0, maximizing=False):
+    if is_victory(board):
+        if maximizing: return -10
+        else: return 10
+    elif is_tie(board): return 0
 
-# def minimax(board, ai_player, maximizing=True):
-#     if is_victory(board):
-#         if maximizing: return 1
-#         else: return -1
-#     elif is_tie(board): return 0
-#     else:
-#         if maximizing:
-#             x = min(minimax(board, next_player(ai_player), not(maximizing)))
-#         else:
-#             x = max(minimax(board, next_player(ai_player), maximizing))
-#         return x 
+    if depth == MINIMAX_DEPTH:
+        return 0
+
+    if maximizing: best_score = -1000
+    else: best_score = 1000
+    for i, j in get_possible_moves(board):
+        board[i][j] = next_player(player)
+        score = minimax(board, next_player(player), depth+1, not maximizing)
+        board[i][j] = '-'
+        if maximizing: best_score = max(best_score, score)
+        else: best_score = min(best_score, score)
+    return best_score
 
 
 def game():
-    board = [['-', '-', '-'], 
-             ['-', '-', '-'], 
+    board = [['-', '-', '-'],
+             ['-', '-', '-'],
              ['-', '-', '-']]
 
     player = PLAYER_O
     ai_player = PLAYER_X
     whose_turn = player
 
+    print_board(board)
     while True:
-        display_board(board)
-        # board = enter_move(board, player)
         enter_move(board, whose_turn, player)
         if is_victory(board):
             print("{} wins!".format(whose_turn))
@@ -127,13 +106,14 @@ def game():
         if is_tie(board):
             print("Tie!")
             return
-        whose_turn = next_player(whose_turn)         
+        whose_turn = next_player(whose_turn)
 
-# game()
+game()
 
-board = [['O', '-', '-'], 
-         ['-', '-', 'O'], 
-         ['O', 'X', 'X']]
+# board = [['O', '-', '-'],
+#          ['-', '-', '-'],
+#          ['-', '-', '-']]
 
-ai_player = PLAYER_X
-print(ai_turn(board, ai_player))
+
+# ai_player = PLAYER_X
+# print(ai_turn(board, ai_player))

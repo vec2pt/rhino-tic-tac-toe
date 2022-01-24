@@ -4,56 +4,46 @@
 # https://github.com/vlmarch
 
 
-import rhinoscriptsyntax as rs
-import random
-import copy
-
 CELL_SIZE = 10
 PLAYER_O = 'O'
 PLAYER_X = 'X'
 
-# ???
-# class Cell:
-#     def __init__(self, i, row, column, v):
-#         self.i = i
-#         self.row = row
-#         self.column = column
-#         self.v = ''
+MINIMAX_DEPTH = 1
+
+import random
+import rhinoscriptsyntax as rs
 
 
 class TicTacToe:
     def __init__(self):
-        self.board_location_point = (0,0,0)
-        self.board = [['', '', ''], ['', '', ''], ['', '', '']]
+        self.board = [['-', '-', '-'], ['-', '-', '-'], ['-', '-', '-']]
         self.player_symbol = PLAYER_O
         self.ai_symbol = PLAYER_X
         self.whose_turn = PLAYER_O
+        self.board_location_point = (0,0,0)
 
     def get_possible_moves(self):
-        self.possible_moves = []
+        possible_moves = []
         for i in range(3):
             for j in range(3):
-                if self.board[i][j] == '':
-                    self.possible_moves.append((i, j))
+                if self.board[i][j] == '-':
+                    possible_moves.append((i,j))
+        return possible_moves
 
-    def check_winner(self):
-        for row in self.board:
-            if row[0] == row[1] == row[2] != '':
-                return True
+    def is_victory(self):
         for i in range(3):
-            column = [row[i] for row in self.board]
-            if column[0] == column[1] == column[2] != '':
+            if self.board[i][0] == self.board[i][1] == self.board[i][2] != '-':
                 return True
-        if self.board[0][0] == self.board[1][1] == self.board[2][2] != '':
+            if self.board[0][i] == self.board[1][i] == self.board[2][i] != '-':
+                return True
+        if self.board[0][0] == self.board[1][1] == self.board[2][2] != '-':
             return True
-        if self.board[0][2] == self.board[1][1] == self.board[2][0] != '':
+        if self.board[0][2] == self.board[1][1] == self.board[2][0] != '-':
             return True
         return False
 
-    def check_tie(self):
-        if all(self.board[0]) and all(self.board[1]) and all(self.board[2]):
-            return True
-        return False
+    def is_tie(self):
+        return all([all([j !='-' for j in self.board[i]]) for i in range(3)])
 
     def make_turn(self):
         self.get_possible_moves()
@@ -121,31 +111,11 @@ class TicTacToe:
     def player_turn(self):
         while True:
             point = rs.GetPoint("{} turn".format(self.player_symbol))
-            for i, j in self.possible_moves:
+            for i, j in self.possible_moves():
                 if self.test_point(point, self.grid[i][j]):
                     return (i, j)
 
 
-    def ai_turn(self):
-        self.temp_board = copy.deepcopy(self.board)
-        for i, j in self.possible_moves:
-            self.minimax(i, j, self.temp_board)
-        i, j = random.choice(self.possible_moves)
-        return (i, j)
-
-    def minimax(self, i, j, temp_board): #def minimax(self, i, j, depth, maximizingPlayer):
-        if self.check_winner():
-            pass
-        if self.check_tie():
-            return 5
-        if self.whose_turn == self.ai_symbol:
-            if self.check_winner():
-                return 10
-            # minimax()
-        else:
-            if self.check_winner():
-                return -10
-            # minimax()
 
     def start(self):
         self.create_board()
@@ -156,13 +126,13 @@ class TicTacToe:
 
         while True:
             self.make_turn()
-            if self.check_winner():
+            if self.is_victory():
                 if self.whose_turn == PLAYER_O:
                    print("{} wins!".format(PLAYER_X))
                 else:
                     print("{} wins!".format(PLAYER_O))
                 return
-            if self.check_tie():
+            if self.is_tie():
                 print("Tie!")
                 return
 
