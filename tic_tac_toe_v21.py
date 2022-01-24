@@ -3,18 +3,13 @@
 # Vladyslav M
 # https://github.com/vlmarch
 
-
-# import rhinoscriptsyntax as rs
-
-CELL_SIZE = 10
 PLAYER_O = 'O'
 PLAYER_X = 'X'
 RHINO_MODE = False # True - for Rhino mode; False - for cmd mode;
 
-MINIMAX_DEPTH = 1
+MINIMAX_DEPTH = 10
 
-if RHINO_MODE: import rhinoscriptsyntax as rs
-
+import random
 
 def print_board(board):
     for i in board:
@@ -23,9 +18,11 @@ def print_board(board):
 
 def enter_move(board, whose_turn, player):
     if whose_turn == player:
+        print("Player move:")
         i = int(input("Please enter row index:"))
         j = int(input("Please enter column index:"))
     else:
+        print("Computer move:")
         i, j = ai_turn(board, whose_turn)
     board[i][j] = whose_turn
     print_board(board)
@@ -95,7 +92,12 @@ def game():
 
     player = PLAYER_O
     ai_player = PLAYER_X
-    whose_turn = player
+
+
+    if random.randint(0, 1):
+        whose_turn = player
+    else:
+        whose_turn = ai_player
 
     print_board(board)
     while True:

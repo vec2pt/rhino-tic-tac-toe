@@ -1,18 +1,15 @@
 # Tic Tac Toe for Rhino v2
-# 20220118
+# 20220124
 # Vladyslav M
 # https://github.com/vlmarch
-
-
-CELL_SIZE = 10
-PLAYER_O = 'O'
-PLAYER_X = 'X'
-
-MINIMAX_DEPTH = 1
 
 import random
 import rhinoscriptsyntax as rs
 
+PLAYER_O = 'O'
+PLAYER_X = 'X'
+MINIMAX_DEPTH = 100
+CELL_SIZE = 10
 
 class TicTacToe:
     def __init__(self):
@@ -45,16 +42,18 @@ class TicTacToe:
     def is_tie(self):
         return all([all([j !='-' for j in self.board[i]]) for i in range(3)])
 
+    def next_player(self, previous_player):
+        return PLAYER_O if previous_player == PLAYER_X else PLAYER_X
+
     def make_turn(self):
         self.get_possible_moves()
         if self.whose_turn == self.player_symbol: i, j = self.player_turn()
         else: i, j = self.ai_turn()
-        line = rs.AddLine(self.grid[i][j][0], self.grid[i][j][1])
-        point = rs.CurveMidPoint(line)
-        rs.DeleteObject(line)
+        p1 , p2 = self.grid[i][j]
+        point = ((p1[0] + p2[0])/2, (p1[1] + p2[1])/2, 0)
         self.board[i][j] = self.whose_turn
         self.draw_x(point) if self.whose_turn == PLAYER_X else self.draw_o(point)
-        self.whose_turn = PLAYER_X if self.whose_turn == PLAYER_O else PLAYER_O
+        self.whose_turn = self.next_player(self.whose_turn)
 
     def create_board(self, size=CELL_SIZE):
         board_location_point = rs.GetPoint("Set board starter point")
@@ -111,10 +110,40 @@ class TicTacToe:
     def player_turn(self):
         while True:
             point = rs.GetPoint("{} turn".format(self.player_symbol))
-            for i, j in self.possible_moves():
+            for i, j in self.get_possible_moves():
                 if self.test_point(point, self.grid[i][j]):
                     return (i, j)
 
+    def ai_turn(self): # ai_turn(board, ai_player):
+        best_score = -1000
+        best_move = None
+        for i, j in self.get_possible_moves():
+            self.board[i][j] = self.ai_symbol
+            score = self.minimax(self.ai_symbol)
+            self.board[i][j] = '-'
+            if score > best_score:
+                best_score = score
+                best_move = (i, j)
+        return best_move
+
+    def minimax(self, player, depth=0, maximizing=False):
+        if self.is_victory():
+            if maximizing: return -10
+            else: return 10
+        elif self.is_tie(): return 0
+
+        if depth == MINIMAX_DEPTH:
+            return 0
+
+        if maximizing: best_score = -1000
+        else: best_score = 1000
+        for i, j in self.get_possible_moves():
+            self.board[i][j] = self.next_player(player)
+            score = self.minimax(self.next_player(player), depth+1, not maximizing)
+            self.board[i][j] = '-'
+            if maximizing: best_score = max(best_score, score)
+            else: best_score = min(best_score, score)
+        return best_score
 
 
     def start(self):
@@ -127,10 +156,7 @@ class TicTacToe:
         while True:
             self.make_turn()
             if self.is_victory():
-                if self.whose_turn == PLAYER_O:
-                   print("{} wins!".format(PLAYER_X))
-                else:
-                    print("{} wins!".format(PLAYER_O))
+                print("{} wins!".format(self.next_player(self.whose_turn)))
                 return
             if self.is_tie():
                 print("Tie!")
