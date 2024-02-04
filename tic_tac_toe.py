@@ -1,6 +1,6 @@
 # Tic Tac Toe for Rhino with the Minimax Algorithm
 # 20220124
-# Vladyslav M
+# vec2pt
 # https://github.com/vlmarch
 
 import random
