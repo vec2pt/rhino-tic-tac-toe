@@ -1,6 +1,6 @@
 # CLI Tic Tac Toe with the Minimax Algorithm
 # 20220123
-# Vladyslav M
+# vec2pt
 # https://github.com/vlmarch
 
 PLAYER_O = 'O'
